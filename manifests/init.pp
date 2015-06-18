@@ -4,9 +4,8 @@
 #
 class memcached (
   $package_ensure  = 'present',
-  $logfile         = $::memcached::params::logfile,
-  $pidfile         = '/var/run/memcached.pid',
-  $manage_firewall = false,
+  $logfile         = '/var/log/memcached.log',
+  $manage_firewall = true,
   $max_memory      = false,
   $item_size       = false,
   $lock_memory     = false,
@@ -19,34 +18,25 @@ class memcached (
   $unix_socket     = undef,
   $install_dev     = false,
   $processorcount  = $::processorcount,
-  $service_restart = true,
-  $auto_removal    = false,
-  $use_sasl        = false,
-  $use_registry    = $::memcached::params::use_registry,
-  $registry_key    = 'HKLM\System\CurrentControlSet\services\memcached\ImagePath',
-  $large_mem_pages = false
+  $iptables_allow  = hiera(client_nets)
 ) inherits memcached::params {
 
   # validate type and convert string to boolean if necessary
-  if is_string($manage_firewall) {
+  if type($manage_firewall) == 'String' {
     $manage_firewall_bool = str2bool($manage_firewall)
   } else {
     $manage_firewall_bool = $manage_firewall
   }
   validate_bool($manage_firewall_bool)
-  validate_bool($service_restart)
 
   if $package_ensure == 'absent' {
     $service_ensure = 'stopped'
-    $service_enable = false
   } else {
     $service_ensure = 'running'
-    $service_enable = true
   }
 
   package { $memcached::params::package_name:
-    ensure   => $package_ensure,
-    provider => $memcached::params::package_provider
+    ensure => $package_ensure,
   }
 
   if $install_dev {
@@ -56,50 +46,30 @@ class memcached (
     }
   }
 
-  if $manage_firewall_bool == true {
-    firewall { "100_tcp_${tcp_port}_for_memcached":
-      port   => $tcp_port,
-      proto  => 'tcp',
-      action => 'accept',
+  if $manage_firewall_bool {
+    iptables::add_tcp_stateful_listen { 'allow_memcached':
+      client_nets => $iptables_allow,
+      dports      => $tcp_port
     }
-
-    firewall { "100_udp_${udp_port}_for_memcached":
-      port   => $udp_port,
-      proto  => 'udp',
-      action => 'accept',
+    iptables::add_udp_listen { 'allow_memcached':
+      client_nets => $iptables_allow,
+      dports      => $udp_port
     }
   }
 
-  if $service_restart {
-    $service_notify_real = Service[$memcached::params::service_name]
-  } else {
-    $service_notify_real = undef
-  }
-
-  if ( $memcached::params::config_file ) {
-    file { $memcached::params::config_file:
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0644',
-      content => template($memcached::params::config_tmpl),
-      require => Package[$memcached::params::package_name],
-      notify  => $service_notify_real,
-    }
+  file { $memcached::params::config_file:
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    content => template($memcached::params::config_tmpl),
+    require => Package[$memcached::params::package_name],
   }
 
   service { $memcached::params::service_name:
     ensure     => $service_ensure,
-    enable     => $service_enable,
+    enable     => true,
     hasrestart => true,
     hasstatus  => $memcached::params::service_hasstatus,
-  }
-
-  if $use_registry {
-    registry_value{ $registry_key:
-      ensure => 'present',
-      type   => 'string',
-      data   => template($memcached::params::config_tmpl),
-      notify => Service[$memcached::params::service_name]
-    }
+    subscribe  => File[$memcached::params::config_file],
   }
 }

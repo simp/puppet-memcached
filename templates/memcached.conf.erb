@@ -3,10 +3,8 @@
 # Run memcached as a daemon.
 -d
 
-<% if @pidfile -%>
 # pidfile
--P <%= @pidfile %>
-<% end -%>
+-P /var/run/memcached.pid
 
 # Log memcached's output
 logfile <%= @logfile -%>
@@ -23,11 +21,6 @@ logfile <%= @logfile -%>
 <% if @lock_memory -%>
 # Lock down all paged memory.  There is a limit on how much memory you may lock.
 -k
-<% end -%>
-
-<% if @use_sasl -%>
-# Start with SASL support
--S
 <% end -%>
 
 <% if @unix_socket -%>
@@ -47,11 +40,6 @@ logfile <%= @logfile -%>
 # Run daemon as user
 -u <%= @user %>
 
-<% if @large_mem_pages -%>
-# Try to use large memory pages (if available)
--L
-<% end -%>
-
 # Limit the number of simultaneous incoming connections.
 -c <%= @max_connections %>
 
@@ -63,7 +51,3 @@ logfile <%= @logfile -%>
 -I <%= @item_size %>
 <% end -%>
 
-<% if @auto_removal -%>
-# Disable automatic removal of items from the cache when out of memory
--M
-<% end -%>
