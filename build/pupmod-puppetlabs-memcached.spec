@@ -1,7 +1,7 @@
 Summary: Puppet Labs Memcached Module
 Name: pupmod-saz-memcached
 Version: 4.0.0
-Release: 1
+Release: 2
 License: Apache License, 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -36,7 +36,6 @@ done
 
 cp Gemfile %{buildroot}/%{prefix}/memcached
 cp LICENSE %{buildroot}/%{prefix}/memcached
-cp Modulefile %{buildroot}/%{prefix}/memcached
 cp README-DEVELOPER %{buildroot}/%{prefix}/memcached
 cp README.md %{buildroot}/%{prefix}/memcached
 
@@ -50,6 +49,9 @@ mkdir -p %{buildroot}/%{prefix}/memcached
 %{prefix}/memcached
 
 %changelog
+* Wed Jun 24 2015 - Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-2
+- Removed the obsolete Modulefile
+
 * Fri Feb 13 2015 - Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-1
 - Migrated to the new 'simp' environment
 
