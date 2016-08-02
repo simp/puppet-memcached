@@ -1,0 +1,4 @@
+* Tue Aug 02 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.8.1-0
+- Fully forked the saz/memcached module into the simp namespace due to
+  dependencies on our iptables module
+

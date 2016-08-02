@@ -1,10 +1,11 @@
 fixtures:
   repositories:
-    'firewall':
-      repo: 'git://github.com/puppetlabs/puppetlabs-firewall.git'
-      ref: '0.1.0'
+    'compliance_markup':
+      repo: 'https://github.com/simp/pupmod-simp-compliance_markup'
+    'iptables':
+      repo: 'https://github.com/simp/pupmod-simp-iptables'
     'stdlib':
-      repo: 'git://github.com/puppetlabs/puppetlabs-stdlib.git'
-      ref: '3.2.0'
+      repo: 'https://github.com/simp/puppetlabs-stdlib'
+      ref: 'simp-master'
   symlinks:
     memcached: "#{source_dir}"
