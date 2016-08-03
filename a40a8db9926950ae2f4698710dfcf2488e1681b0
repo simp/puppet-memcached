@@ -1,0 +1,7 @@
+Code-Review+2: Nick Miller <nick.miller@onyxpoint.com>
+Verified+1: Nick Miller <nick.miller@onyxpoint.com>
+Submitted-by: Trevor Vaughan <tvaughan@onyxpoint.com>
+Submitted-at: Wed, 03 Aug 2016 15:30:33 -0400
+Reviewed-on: https://review.gerrithub.io/286103
+Project: simp/puppet-memcached
+Branch: refs/heads/simp-master
