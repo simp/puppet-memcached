@@ -1,9 +1,9 @@
 {
   "name": "simp-memcached",
-  "version": "2.8.1",
+  "version": "2.8.2",
   "author": "simp",
   "summary": "Manage memcached via Puppet - Forked from saz/memcached",
-  "license": "Apache License, Version 2.0",
+  "license": "Apache-2.0",
   "source": "git://github.com/simp/puppet-memcached.git",
   "project_page": "https://github.com/simp/puppet-memcached",
   "issues_url": "https://simp-project.atlassian.net",

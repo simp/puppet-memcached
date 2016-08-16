@@ -1,3 +1,6 @@
+* Tue Aug 16 2016 Nick Miller <nick.miller@onyxpoint.com> - 2.8.2-0
+- Updated module assets to build rpms
+
 * Tue Aug 02 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.8.1-0
 - Fully forked the saz/memcached module into the simp namespace due to
   dependencies on our iptables module
